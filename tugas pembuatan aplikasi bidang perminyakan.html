@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Permeabilitas dan Porositas Reservoir</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        h2 {
+            font-size: 24px;
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            font-size: 18px;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #e7f3fe;
+            border-left: 6px solid #2196F3;
+            border-radius: 4px;
+        }
+        .frame {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="frame">
+            <h2>Perhitungan Permeabilitas</h2>
+            <label for="q">Debit Q (m³/s):</label>
+            <input type="text" id="q">
+            
+            <label for="mu">Viskositas µ (Pa.s):</label>
+            <input type="text" id="mu">
+            
+            <label for="l">Panjang L (m):</label>
+            <input type="text" id="l">
+            
+            <label for="a">Luas A (m²):</label>
+            <input type="text" id="a">
+            
+            <label for="dp">Perbedaan Tekanan ∆P (Pa):</label>
+            <input type="text" id="dp">
+            
+            <button onclick="hitungPermeabilitas()">Hitung Permeabilitas</button>
+            <div id="resultPermeabilitas" class="result">Permeabilitas: -</div>
+        </div>
+
+        <div class="frame">
+            <h2>Perhitungan Porositas</h2>
+            <label for="v_void">Volume Void V_void (m³):</label>
+            <input type="text" id="v_void">
+            
+            <label for="v_total">Volume Total V_total (m³):</label>
+            <input type="text" id="v_total">
+            
+            <button onclick="hitungPorositas()">Hitung Porositas</button>
+            <div id="resultPorositas" class="result">Porositas: -</div>
+        </div>
+    </div>
+
+    <script>
+        function hitungPermeabilitas() {
+            const Q = parseFloat(document.getElementById('q').value);
+            const mu = parseFloat(document.getElementById('mu').value);
+            const L = parseFloat(document.getElementById('l').value);
+            const A = parseFloat(document.getElementById('a').value);
+            const dp = parseFloat(document.getElementById('dp').value);
+            
+            if (isNaN(Q) || isNaN(mu) || isNaN(L) || isNaN(A) || isNaN(dp)) {
+                alert("Mohon masukkan nilai yang valid.");
+                return;
+            }
+
+            const K = (Q * mu * L) / (A * dp);
+            document.getElementById('resultPermeabilitas').innerText = `Permeabilitas: ${K.toExponential(4)} m²`;
+        }
+
+        function hitungPorositas() {
+            const V_void = parseFloat(document.getElementById('v_void').value);
+            const V_total = parseFloat(document.getElementById('v_total').value);
+            
+            if (isNaN(V_void) || isNaN(V_total) || V_total === 0) {
+                alert("Mohon masukkan nilai yang valid.");
+                return;
+            }
+
+            const porositas = (V_void / V_total) * 100;
+            document.getElementById('resultPorositas').innerText = `Porositas: ${porositas.toFixed(2)} %`;
+        }
+    </script>
+
+</body>
+</html>
